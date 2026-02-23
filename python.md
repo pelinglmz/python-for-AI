@@ -606,6 +606,76 @@ Sadece şartı sağlayanları alır.
 
 ---
 
+OBJECT ORIENTED PROGRAMMING (OOP)
+
+Gerçek AI projelerinde class yapısı kullanılır.
+
+Model yazarken, veri loader yazarken, custom layer yazarken class gerekir.
+
+Class Nedir?
+
+Class = bir şablon (template).
+
+class Student:
+    pass
+
+Bu sadece boş bir class.
+
+init Nedir?
+
+Constructor (başlatıcı fonksiyon).
+
+Class oluşturulurken otomatik çalışır.
+
+class Student:
+
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+
+Burada:
+
+self → objenin kendisini temsil eder
+
+name → parametre
+
+self.name → objeye ait özellik
+
+Obje Oluşturma
+s1 = Student("Ahmet", 85)
+
+print(s1.name)
+print(s1.score)
+Method (Fonksiyon Eklemek)
+class Student:
+
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+
+    def is_passed(self):
+        return self.score > 80
+
+Kullanım:
+
+s1 = Student("Ahmet", 85)
+print(s1.is_passed())
+AI Bağlantısı
+
+Gerçek hayatta model şöyle yazılır:
+
+class LinearModel:
+
+    def __init__(self, weight):
+        self.weight = weight
+
+    def predict(self, x):
+        return self.weight * x
+
+Neural network’lerin temeli budur.
+
+---
+
 # NUMPY NEDİR?
 
 NumPy = Numerical Python
@@ -773,6 +843,26 @@ print(r)
 Ne işe yarar?
 
 Model ağırlıkları random başlatılır.
+
+RANDOM SEED
+
+Random demek tamamen rastgele değildir.
+
+Aynı sonucu tekrar üretmek için seed kullanılır.
+
+import numpy as np
+
+np.random.seed(42)
+
+print(np.random.rand(3))
+
+Her çalıştırmada aynı sonuç gelir.
+
+AI’da Önemi
+
+Deney tekrar edilebilir olmalı.
+
+Makale yazarken seed belirtilir.
 
 ---
 
@@ -1442,6 +1532,28 @@ hep groupby ile yapılır.
 
 ---
 
+CSV DOSYASI OKUMA
+
+Gerçek AI projelerinde veri genelde CSV dosyasındadır.
+
+CSV Okuma
+import pandas as pd
+
+df = pd.read_csv("data.csv")
+print(df.head())
+CSV Kaydetme
+df.to_csv("cleaned_data.csv", index=False)
+Excel Okuma
+df = pd.read_excel("data.xlsx")
+AI Süreci
+
+1️⃣ CSV yüklenir
+2️⃣ Temizlik yapılır
+3️⃣ Yeni feature oluşturulur
+4️⃣ Model eğitilir
+
+---
+
 # DATA CLEANING
 
 Gerçek veri asla temiz değildir.
@@ -1546,6 +1658,88 @@ ile doldurulur.
 
 ---
 
+TRAIN – TEST SPLIT
+
+Modeli test etmeden eğitmek hatadır.
+
+Veri ikiye bölünür:
+
+Train (öğrenme)
+
+Test (değerlendirme)
+
+from sklearn.model_selection import train_test_split
+
+X = df[["Age", "Score"]]
+y = df["Passed"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+Parametreler
+
+test_size=0.2 → %20 test
+
+random_state=42 → her seferinde aynı bölme
+
+AI Bağlantısı
+
+Model:
+
+model.fit(X_train, y_train)
+model.score(X_test, y_test)
+
+Test set olmadan model değerlendirilmez.
+
+---
+
+SCALING / NORMALIZATION
+➜ NEREYE EKLEMELİSİN?
+
+👉 Train-Test Split bölümünden hemen sonra
+
+🟢 FEATURE SCALING
+
+AI modelleri büyük sayılardan etkilenir.
+
+Örnek:
+
+Maaş: 100000
+
+Yaş: 25
+
+Maaş modeli domine eder.
+
+Çözüm: Scaling
+
+StandardScaler
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+Neden transform ayrı?
+
+Test verisi öğrenmez.
+
+Sadece train üzerinden öğrenilen ortalama ve std kullanılır.
+
+AI’da Neden Önemli?
+
+Logistic regression
+
+Neural network
+
+KNN
+
+SVM
+
+Scaling olmadan kötü sonuç verir.
+
+---
 
 # MATPLOTLIB
 
@@ -1792,6 +1986,53 @@ Matplotlib mantığı:
 2) plt.xxx ile grafiği çiz
 3) plt.show()
 ```
+
+
+EXCEPTION HANDLING (HATA YAKALAMA)
+
+Program hata verirse durur.
+
+Ama biz hatayı yakalayabiliriz.
+
+try – except
+try:
+    x = int(input("Sayı gir: "))
+    print(x)
+except ValueError:
+    print("Geçerli bir sayı gir.")
+
+Ne oldu?
+
+Hata oluşursa program çökmedi
+
+except bloğu çalıştı
+
+Birden Fazla Exception
+try:
+    x = 10 / 0
+except ZeroDivisionError:
+    print("Sıfıra bölünemez.")
+finally
+
+Her durumda çalışır.
+
+try:
+    x = int("10")
+except:
+    print("Hata var")
+finally:
+    print("Bu her zaman çalışır")
+AI Bağlantısı
+
+Dosya okurken:
+
+try:
+    df = pd.read_csv("data.csv")
+except FileNotFoundError:
+    print("Dosya bulunamadı")
+
+Profesyonel projelerde zorunludur.
+
 
 # Troubleshooting (Hata Çözme Mantığı)
 
@@ -2094,5 +2335,36 @@ Vectorization 50-100 kat hızlı olabilir.
 ✔ Kod tekrarını azalt
 ✔ Küçük test verileriyle dene
 ✔ Yorum yaz ama abartma
+
+---
+
+VIRTUAL ENVIRONMENT (PROJE ORTAMI)
+
+Gerçek AI projelerinde her proje ayrı ortamda çalışır.
+
+Ortam Oluşturma
+python -m venv myenv
+Aktif Etme
+
+Windows:
+
+myenv\Scripts\activate
+
+Mac/Linux:
+
+source myenv/bin/activate
+Requirements Dosyası
+pip freeze > requirements.txt
+
+Kurulum:
+
+pip install -r requirements.txt
+Neden Önemli?
+
+Kütüphane çakışmaz
+
+Proje taşınabilir olur
+
+GitHub için profesyonel görünür
 
 
